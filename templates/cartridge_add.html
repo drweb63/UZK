@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Добавление картриджа {% endblock %}
+
+{% block collapse1 %}<ul id="demoo">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+
+{% block content %}
+         <table >
+<form action="{{ url_for('cartridges')}}" method=post>
+    <input type=hidden name="action" value='Adds'>
+    <tr>
+            <td>Название</td>
+            <td>Принтер</td>
+    </tr>
+    <tr>
+        <th><input type=text name="name" value=''></th>
+        <th><input type=text name="name" value=''></th>
+    </tr>
+    <tr><th>
+    <input type=submit value="Add">
+</form>
+<form action="{{ url_for('cartridges')}}" method=post>
+    <input type=hidden name="action" value='Cancel'>
+    <input type=submit value="Cancel">
+</form>
+             </th></tr></table>
+{% endblock %}

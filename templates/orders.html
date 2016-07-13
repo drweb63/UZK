@@ -1,0 +1,106 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Заказы<br>
+<form class="form-inline" action="{{ url_for('orders')}}" method=post>
+    <input autofocus class="form-control" type=text name="barcode" value=''>
+    <select class="form-control" name="tow">
+     {% for tow in tows %}
+     <option value={{ tow.id }}>{{ tow.fullname }}</option>
+     {% endfor %}
+    </select>
+    <select class="form-control" name="mark">
+     <option value="Обычн">Обычный</option>
+     <option value="Наш">Наш</option>
+     <option value="Рекл">Рекламация</option>
+     <option value="Фикт">Фиктивный</option>
+    </select>
+    <input type=hidden name="action" value='Add'>
+    <input class="btn btn-success" type=submit value="Добавить">
+</form><br>
+
+{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+{% block active %}class="active"{% endblock %}
+{% block content %}
+
+{% for customer, items in full.items() %}
+
+<form action="{{ url_for('orders')}}" method=post>
+<input type=hidden name="action" value='cst_ord_add'>
+<input type=hidden name="cst_ord" value='{{customer}}'>
+<button type="submit" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+</form>
+<input type="checkbox" id="hd-{{customer}}" class="hide" />
+<label for="hd-{{customer}}" class="table table-hover">{{customer}}</label>
+
+             <div class="table-responsive">
+            <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Картридж</th><th>Клиент</th><th>Тип работ</th><th>Штрих-код</th><th>Метка</th><th>Дата</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+{% for id, cartridge, customer, tow, barcode, mark, date in items %}
+
+    <tr>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ id }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ cartridge }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ customer }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ tow }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ barcode }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ mark }}</td>
+        <td onclick='window.location.href="/full_order/?id={{ id }}"; return false'>{{ date }}</td>
+         <td>
+            <button class="btn btn-xs btn-link" id="printBut" onclick="print('{{barcode}}.gif')"><span class="glyphicon glyphicon-print"></span></button>
+            <a class="btn btn-xs btn-danger" href="javascript:void(0)" onclick = "document.getElementById('{{id}}').style.display='block';document.getElementById('{{id}}').style.display='block'"><span class="glyphicon glyphicon-ok"></span></a>
+         </td>
+    </tr>
+            <tr><td colspan="8">
+            <div id="{{id}}" class="envelope">
+
+		    <h2>Подтвердите завершение заказа</h2>
+		    <form class="form-inline" action="{{ url_for('orders')}}" method=post>
+                <input type=hidden name="action" value='Close'><br>
+                <input type=hidden name="id" value='{{id}}'>
+                <input class="form-control" type="checkbox" name="toner" value="1" > Заправка
+                <input class="form-control" type="checkbox" name="opc" value="1" > Фотобарабан
+                <input class="form-control" type="checkbox" name="pcr" value="1" > Вал заряда
+                <input class="form-control" type="checkbox" name="wiper_blade" value="1" > Лезвие очистки
+                <input class="form-control" type="checkbox" name="recovery_blade" value="1" > Уплотнительное лезвие<br>
+                <input class="form-control" type="checkbox" name="develop_blade" value="1" > Магнитный вал
+                <input class="form-control" type="checkbox" name="doctor_blade" value="1" > Дозирующее лезвие
+                <select class="form-control" name="mark">
+                <option value="Обычн">Обычный</option>
+                <option value="Наш">Наш</option>
+                <option value="Рекл">Рекламация</option>
+                <option value="Фикт">Фиктивный</option>
+                </select>
+                <input class="form-control" type=text name="comment" value=''><br>
+                Завершил<br>
+                <select class="form-control" name="user_close">
+                {% for name in user %}
+                <option value='{{ name.fullname }}'>{{ name.fullname }}</option>
+                {% endfor %}
+                </select>
+		        <input type="submit" value="Закрыть" class="btn btn-danger">
+                <a class="btn btn-warning" href="javascript:void(0)" onclick = "document.getElementById('{{id}}').style.display='none';document.getElementById('fade').style.display='none'">Отмена</a>
+
+		    </form>
+	         </div></td></tr>
+{% endfor %}
+
+
+
+        </tbody>
+    </table>
+</div><br>
+
+        {% endfor %}
+          
+
+{% endblock %}

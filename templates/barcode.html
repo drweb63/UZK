@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %}Штрих-коды
+{% endblock %}
+
+{% block collapse1 %}<ul id="demoo">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+
+{% block content %}
+<form class="form-inline" action="{{ url_for('barcode')}}" method=post>
+    <input type=text name="barcode" value='' class="form-control">
+    <input type=hidden name="action" value='Find'>
+    <input class="btn btn-success" type=submit value="Поиск">
+</form>
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Картридж</th><th>Клиент</th><th>Штрих-код</th>
+        </tr>
+        </thead>
+        <tbody>
+{% for barcode, cartridge, customer in full %}
+
+    <tr>
+        <td onclick='window.location.href="/barcode/?full=yes&id={{ barcode.id }}"; return false'>{{ barcode.id }}</td>
+        <td onclick='window.location.href="/barcode/?full=yes&id={{ barcode.id }}"; return false'>{{ cartridge.name }}</td>
+        <td onclick='window.location.href="/barcode/?full=yes&id={{ barcode.id }}"; return false'>{{ customer.name }}</td>
+        <td onclick='window.location.href="/barcode/?full=yes&id={{ barcode.id }}"; return false'>{{ barcode.barcode }}</td>
+         <td>
+            <button class="btn btn-xs btn-link" id="printBut" onclick="print('{{barcode.barcode}}.gif')"><span class="glyphicon glyphicon-print"></span></button>
+            <button class="btn btn-xs btn-warning" onclick="window.location.href='{{ url_for('barcode')}}?edit=yes&barcode={{barcode.barcode}}'"><span class="glyphicon glyphicon-pencil"></span></button>
+            <button class="btn btn-xs btn-danger" onclick="window.location.href='{{ url_for('barcode')}}?del=yes&barcode={{barcode.barcode}}'"><span class="glyphicon glyphicon-trash"></span></button>
+        </td>
+    </tr>
+{% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

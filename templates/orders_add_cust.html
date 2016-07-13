@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Добавление заказа {% endblock %}
+
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+
+{% block content %}
+<form class="form-inline" action="{{ url_for('orders')}}" method=post>
+    <input type=hidden name="action" value='Adds'>
+    <select name="cartridge" data-placeholder="Выберите картридж" class="chosen-select" style="width:300px;">
+    {% for cartridge in cartridges %}
+     <option value={{ cartridge.id }}>{{ cartridge.name }}</option>
+     {% endfor %}
+    </select>
+    <select name="customer" class="form-control" >
+
+        <option value={{ customerr.id }}>{{ customerr.name }}</option>
+
+    </select>
+    <select class="form-control" name="tow">
+     {% for tow in tows %}
+     <option value={{ tow.id }}>{{ tow.fullname }}</option>
+     {% endfor %}
+    </select>
+    <select class="form-control" name="mark">
+     <option value="Обычн">Обычный</option>
+     <option value="Наш">Наш</option>
+     <option value="Рекл">Рекламация</option>
+     <option value="Фикт">Фиктивный</option>
+    </select>
+    <input type=hidden name="barcode" value=''>
+    <input type=date class="form-control" name="date" value={{ date }}>
+    <input class="btn btn-success" type=submit value="Добавить">
+    <form action="{{ url_for('orders')}}" method=post>
+    <input type=hidden name="action" value='Cancel'>
+    <input class="btn btn-warning" type=submit value="Отмена">
+</form>
+</form>
+{% endblock %}

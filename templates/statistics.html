@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Статистика {% endblock %}
+
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block active2 %}class="active"{% endblock %}
+{% block content %}
+<div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="morris-area-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %}Номенклатура картриджей
+<form class="form-inline" action="{{ url_for('cartridges')}}" method=post>
+    <input type=hidden name="action" value='Add'>
+    <input class="btn btn-success" type=submit value="Добавить">
+</form>
+
+{% endblock %}
+
+{% block collapse1 %}<ul id="demoo">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+
+{% block content %}
+<form class="form-inline" action="{{ url_for('cartridges')}}" method=post>
+    <input type=text name="name" value='' class="form-control">
+    <input type=hidden name="action" value='Find'>
+    <input class="btn btn-success" type=submit value="Поиск">
+</form>
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Картридж</th><th>Тонер</th><th>OPC</th><th>Принтеры</th><th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+{% for row in rows %}
+
+    <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.toner }}</td>
+        <td>{{ row.opc }}</td>
+        <td>{{ row.printers }}</td>
+         <td>
+            <button class="btn btn-xs btn-warning" href="javascript:void(0)" onclick = "document.getElementById('{{row.id}}').style.display='block';document.getElementById('{{row.id}}').style.display='block'"><span class="glyphicon glyphicon-pencil"></span></button>
+            <button class="btn btn-xs btn-danger" onclick="window.location.href='{{ url_for('cartridges')}}?del=yes&id={{row.id}}'"><span class="glyphicon glyphicon-trash"></span></button>
+         </td>
+    </tr>
+<tr><td colspan="7">
+            <div id="{{row.id}}" class="envelope">
+		    <h4>Редактирование картриджа</h4>
+		    <form action="{{ url_for('cartridges')}}" method=post>
+                <input type=hidden name="action" value='Edit'>
+                <input type=hidden name="id" value='{{row.id}}'>
+                <input type=text name="name" value='{{row.name}}'>
+                <input type=text name="printer" value='{{row.printers}}'>
+                <input type="submit" value="Изменить" class="btn btn-xs btn-danger">
+                <a class="btn btn-xs btn-warning" href="javascript:void(0)" onclick = "document.getElementById('{{row.id}}').style.display='none';document.getElementById('fade').style.display='none'">Отмена</a>
+		    </form>
+	         </div></td></tr>
+
+{% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

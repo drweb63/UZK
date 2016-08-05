@@ -4,7 +4,7 @@ from database import session
 wb = load_workbook(filename='Клиенты.xlsx', read_only=True)
 sheet = wb.get_sheet_names()
 ws = wb['Лист1'] # ws is now an IterableWorksheet
-
+#gh
 for row in ws.rows:
     a = 0
     b = 0

@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template, url_for, redirect, request, flash
 from auth import requires_auth, requires_manager, requires_boss, requires_admin
 from database import session
-from sqlalchemy import text, insert, select, desc, update
+from sqlalchemy import text, insert, select, desc, update, func
 from settings import path_barcode
 import random, datetime
 from pprint import pprint
@@ -381,7 +381,6 @@ def archive_orders():
                 date2 = request.form['date2']
                 if date2 != '':
                     filters.append(Archive_orders.date_close <= date2)
-            pprint(request.form)
             full1 = session.query(Archive_orders.id, Cartridges.name,
                                   Customers.name, Archive_orders.toner, Archive_orders.opc,
                                   Archive_orders.pcr, Archive_orders.wiper_blade, Archive_orders.recovery_blade,
@@ -401,7 +400,6 @@ def archive_orders():
 
             return render_template('archive_orders.html',count=full2, full=tmp_orders1, cartridges=cartridges, customers=customers,
                                    users=users, fullnames = namesd)
-
     return render_template('archive_orders.html', count=full0, full=tmp_orders, cartridges=cartridges, customers=customers, users=users, fullnames = namesd)
 
 @app.route('/archive_all/', methods=['GET'])
@@ -579,8 +577,44 @@ def statistics():
     auth = request.authorization
     user1 = session.query(Users).filter_by(name=auth.username).first()
     namesd = user1.fullname
+    full = session.query(Archive_orders.id, Cartridges.name, Customers.name, Archive_orders.toner, Archive_orders.opc,
+                         Archive_orders.pcr, Archive_orders.wiper_blade, Archive_orders.recovery_blade,
+                         Archive_orders.develop_blade,
+                         Archive_orders.doctor_blade, Archive_orders.barcode, Archive_orders.mark,
+                         Archive_orders.user_close,
+                         Archive_orders.date, Archive_orders.date_close, Archive_orders.status) \
+        .order_by(desc(Archive_orders.id)) \
+        .join(Cartridges, Archive_orders.cartridge == Cartridges.id) \
+        .join(Customers, Archive_orders.customer == Customers.id)
 
-    return render_template('statistics.html', fullnames = namesd)
+
+    tmp_orders1 = {}
+    for order in full:
+        if order.name not in tmp_orders1:
+            tmp_orders1[order.name] = []
+            #all_cartridges = session.query(Barcode.customer, Customers.name, Customers.id)\
+                #.join(Customers,Barcode.customer == Customers.id).filter(Customers.name == order.name).count()
+            #all_work = session.query(Archive_orders.customer,Customers.id, Customers.name)\
+                #.join(Customers, Archive_orders.customer == Customers.id).filter(Customers.name == order.name).count()
+            full_cartridges = session.query(func.min(Barcode.cartridge), Cartridges.name, func.count('Barcode.cartridge').label('cartridges_count'))\
+                .join(Customers,Barcode.customer == Customers.id) \
+                .join(Cartridges, Barcode.cartridge == Cartridges.id)\
+                .group_by(Cartridges.name)\
+                .filter(Customers.name == order.name).all()
+            #all_cartridges = str(all_cartridges)
+            #all_work = str(all_work)
+            #all = list()
+            #all.append(all_cartridges)
+            #all.append(all_work)
+            #tmp_orders1[order.name].append(all)
+            #tmp_orders1[order.name].append(all_work)
+            tmp_orders1[order.name].append(full_cartridges)
+
+    pprint(tmp_orders1)
+    cartridges = Cartridges.query.order_by(Cartridges.name).all()
+    customers = Customers.query.order_by(Customers.name).all()
+    users = Users.query.order_by(desc(Users.id)).all()
+    return render_template('statistics.html', full1=tmp_orders1, cartridges=cartridges, customers=customers, users=users, fullnames = namesd)
 
 @app.route('/settings/')
 @requires_auth
@@ -805,4 +839,4 @@ def tow(rows=None):
     return render_template('tow.html',rows=tow, fullnames = namesd)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug='True')

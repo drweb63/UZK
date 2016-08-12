@@ -8,16 +8,47 @@
 {% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
 {% block active2 %}class="active"{% endblock %}
 {% block content %}
-<div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!--
+<div class="table-responsive">
+<table class="table table-hover">
+<thead>
+<tr>
+    <th>Клиент</th><th>Всего картриджей</th><th>Выполнено работ</th>
+</tr>
+</thead>
+    </table>
+</div> -->
+{% for customer , items in full1.items() %}
+<input type="checkbox" id="hd-{{customer}}" class="hide" />
+<label for="hd-{{customer}}" class="table table-hover">{{customer}}
+</label>
+             <div class="table-responsive">
+            <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Картридж</th><th>Количество</th><th><abbr title="Заправка">З</abbr></th>
+            <th><abbr title="Фотобарабан">Б</abbr></th><th><abbr title="Вал заряда">П</abbr></th><th><abbr title="Лезвие очистки">О</abbr></th>
+            <th><abbr title="Уплотнительное лезвие">У</abbr></th><th><abbr title="Магнитный вал">М</abbr></th>
+            <th><abbr title="Дозирующее лезвие">Д</abbr>
+        </tr>
+        </thead>
+        <tbody>
+{% for number in items %}
+    {% for number, cartridge, count in number %}
+        <tr>
+        <td>{{ cartridge }}</td>
+        <td>{{ count }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endfor %}
+{% endfor %}
+</tbody>
+    </table>
+</div>
+        {% endfor %}
 {% endblock %}

@@ -34,18 +34,20 @@
         </thead>
         <tbody>
 {% for number in items %}
-    {% for number, cartridge, count in number %}
-        <tr>
+    {% for count, cartridge, toner, opc, pcr, wiper_blade, recovery_blade, develop_blade, doctor_blade in number %}
+<tr>
         <td>{{ cartridge }}</td>
         <td>{{ count }}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{ toner }}</td>
+        <td>{{ opc }}</td>
+        <td>{{ pcr }}</td>
+        <td>{{ wiper_blade }}</td>
+        <td>{{ recovery_blade }}</td>
+        <td>{{ develop_blade }}</td>
+        <td>{{ doctor_blade }}</td>
+        </tr>
         {% endfor %}
+
 {% endfor %}
 </tbody>
     </table>

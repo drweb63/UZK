@@ -306,7 +306,8 @@ def archive_orders():
 
     if request.method == 'POST':
         if request.form['action'] == 'Sort':
-            if 'toner' in request.form or 'opc' in request.form or 'pcr' in request.form or 'wiper_blade' in request.form or 'recovery_blade' in request.form or 'develop_blade' in request.form or 'doctor_blade' in request.form:
+            if 'toner' in request.form or 'opc' in request.form or 'pcr' in request.form or 'wiper_blade' in request.form or \
+                            'recovery_blade' in request.form or 'develop_blade' in request.form or 'doctor_blade' in request.form:
                 filters = []
                 cartridge = request.form['cartridge']
                 if cartridge != '*':
@@ -400,7 +401,8 @@ def archive_orders():
 
             return render_template('archive_orders.html',count=full2, full=tmp_orders1, cartridges=cartridges, customers=customers,
                                    users=users, fullnames = namesd)
-    return render_template('archive_orders.html', count=full0, full=tmp_orders, cartridges=cartridges, customers=customers, users=users, fullnames = namesd)
+    return render_template('archive_orders.html', count=full0, full=tmp_orders, cartridges=cartridges, customers=customers,
+                           users=users, fullnames = namesd)
 
 @app.route('/archive_all/', methods=['GET'])
 @requires_auth
@@ -577,44 +579,45 @@ def statistics():
     auth = request.authorization
     user1 = session.query(Users).filter_by(name=auth.username).first()
     namesd = user1.fullname
-    full = session.query(Archive_orders.id, Cartridges.name, Customers.name, Archive_orders.toner, Archive_orders.opc,
-                         Archive_orders.pcr, Archive_orders.wiper_blade, Archive_orders.recovery_blade,
-                         Archive_orders.develop_blade,
-                         Archive_orders.doctor_blade, Archive_orders.barcode, Archive_orders.mark,
-                         Archive_orders.user_close,
-                         Archive_orders.date, Archive_orders.date_close, Archive_orders.status) \
-        .order_by(desc(Archive_orders.id)) \
-        .join(Cartridges, Archive_orders.cartridge == Cartridges.id) \
-        .join(Customers, Archive_orders.customer == Customers.id)
-
+    full = session.query(Archive_orders.id, Customers.id, Customers.name) \
+        .join(Customers, Archive_orders.customer == Customers.id)\
+        .order_by(Customers.name)
 
     tmp_orders1 = {}
     for order in full:
         if order.name not in tmp_orders1:
             tmp_orders1[order.name] = []
-            #all_cartridges = session.query(Barcode.customer, Customers.name, Customers.id)\
-                #.join(Customers,Barcode.customer == Customers.id).filter(Customers.name == order.name).count()
-            #all_work = session.query(Archive_orders.customer,Customers.id, Customers.name)\
-                #.join(Customers, Archive_orders.customer == Customers.id).filter(Customers.name == order.name).count()
-            full_cartridges = session.query(func.min(Barcode.cartridge), Cartridges.name, func.count('Barcode.cartridge').label('cartridges_count'))\
+            full_work = session.query(func.min(Archive_orders.cartridge), func.min(Customers.name), Cartridges.name,
+                                      func.sum(Archive_orders.toner).label('toner'),
+                                      func.sum(Archive_orders.opc).label('opc'),
+                                      func.sum(Archive_orders.pcr).label('pcr'),
+                                      func.sum(Archive_orders.wiper_blade).label('wiper_blade'),
+                                      func.sum(Archive_orders.recovery_blade).label('recovery_blade'),
+                                      func.sum(Archive_orders.develop_blade).label('develop_blade'),
+                                      func.sum(Archive_orders.doctor_blade).label('doctor_blade')) \
+                .join(Customers, Archive_orders.customer == Customers.id) \
+                .join(Cartridges, Archive_orders.cartridge == Cartridges.id) \
+                .group_by(Cartridges.name) \
+                .filter(Customers.name == order.name).subquery()
+            full_cartridges = session.query(func.count(Barcode.barcode), Cartridges.name, func.min(full_work.c.toner),
+                                            func.min(full_work.c.opc), func.min(full_work.c.pcr), func.min(full_work.c.wiper_blade),
+                                            func.min(full_work.c.recovery_blade), func.min(full_work.c.develop_blade),
+                                            func.min(full_work.c.doctor_blade)) \
                 .join(Customers,Barcode.customer == Customers.id) \
-                .join(Cartridges, Barcode.cartridge == Cartridges.id)\
+                .join(Cartridges, Barcode.cartridge == Cartridges.id) \
+                .outerjoin(full_work, Cartridges.name == full_work.c.name)\
                 .group_by(Cartridges.name)\
                 .filter(Customers.name == order.name).all()
-            #all_cartridges = str(all_cartridges)
-            #all_work = str(all_work)
-            #all = list()
-            #all.append(all_cartridges)
-            #all.append(all_work)
-            #tmp_orders1[order.name].append(all)
-            #tmp_orders1[order.name].append(all_work)
+            pprint(full_work)
             tmp_orders1[order.name].append(full_cartridges)
+
 
     pprint(tmp_orders1)
     cartridges = Cartridges.query.order_by(Cartridges.name).all()
     customers = Customers.query.order_by(Customers.name).all()
     users = Users.query.order_by(desc(Users.id)).all()
-    return render_template('statistics.html', full1=tmp_orders1, cartridges=cartridges, customers=customers, users=users, fullnames = namesd)
+    return render_template('statistics.html', full1=tmp_orders1, cartridges=cartridges, customers=customers, users=users,
+                           fullnames = namesd)
 
 @app.route('/settings/')
 @requires_auth

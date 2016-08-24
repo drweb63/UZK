@@ -36,11 +36,8 @@ class Orders(Base):
     mark = Column(String(250), nullable=True, default='')
     date = Column(Date, nullable=True, default='')
 
-
-
     def __int__(self):
         return self.id
-
 
 class Close_orders(Base):
     __tablename__ = 'close_orders'
@@ -101,28 +98,6 @@ class Barcode(Base):
     def __str__(self):
         return self.name
 
-class Storage(Base):
-    __tablename__ = 'storage'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False, default='')
-    category = Column(Integer, nullable=True, default='')
-    amount = Column(String(250), nullable=True, default='')
-
-    def __str__(self):
-        return self.name
-
-class Guides(Base):
-    __tablename__ = 'guides'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False, default='')
-    category = Column(Integer, nullable=True, default='')
-    full = Column(String(250), nullable=True, default='')
-
-    def __str__(self):
-        return self.name
-
 class Cartridges(Base):
     __tablename__ = 'cartridges'
 
@@ -140,34 +115,11 @@ class Cartridges(Base):
     def __str__(self):
         return self.name
 
-class Materials(Base):
-    __tablename__ = 'materials'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False, default='')
-    amount = Column(String(250), nullable=True, default='')
-    price = Column(String(250), nullable=True, default='')
-    providers = Column(Integer, nullable=True, default='')
-    category = Column(Integer, nullable=True, default='')
-
-    def __str__(self):
-        return self.name
-
 class Category(Base):
     __tablename__ = 'category'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False, default='', unique=True)
-
-    def __str__(self):
-        return self.name
-
-class Providers(Base):
-    __tablename__ = 'providers'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False, default='', unique=True)
-    inn = Column(Integer, nullable=True, default='', unique=True)
 
     def __str__(self):
         return self.name
@@ -192,6 +144,18 @@ class Users(Base):
     privilegies = Column(Integer, nullable=False, default='0')
     vision = Column(Integer, nullable=False, default='1')
 
+
+
     def __str__(self):
         return self.name
 
+class Logs(Base):
+    __tablename__ = 'logs'
+
+    id = Column(Integer, primary_key=True)
+    user = Column(String(250), nullable=True, default='')
+    time = Column(String(250), nullable=True, default='')
+    message = Column(Date, nullable=True, default='')
+
+    def __str__(self):
+        return self.user

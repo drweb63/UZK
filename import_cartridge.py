@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 from models import Customers, Cartridges
-from database import session
+from settings import session
 wb = load_workbook(filename='Картриджи.xlsx', read_only=True)
 sheet = wb.get_sheet_names()
 ws = wb['Лист1'] # ws is now an IterableWorksheet

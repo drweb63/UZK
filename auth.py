@@ -2,6 +2,7 @@ from functools import wraps
 from flask import request, Response
 from models import Users
 from settings import session
+import hashlib
 
 
 def check_auth(username, password):
@@ -9,7 +10,9 @@ def check_auth(username, password):
     password combination is valid.
     """
     user = session.query(Users).filter_by(name=username).first()
-    return username == user.name  and password ==  user.password
+    pass_hash = hashlib.md5(password.encode())
+    passwd = pass_hash.hexdigest()
+    return username == user.name  and passwd ==  user.password
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""

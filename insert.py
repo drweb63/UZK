@@ -1,4 +1,3 @@
-from sqlalchemy.sql import insert
 from models import Customers
 from settings import engine
 

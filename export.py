@@ -2,8 +2,7 @@ from openpyxl import Workbook
 from openpyxl.compat import range
 from openpyxl.cell import get_column_letter
 from models import Customers
-from database import session
-from sqlalchemy import func
+from settings import session
 
 customers = session.query(Customers).all()
 count = session.query(Customers).count()

@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
-from database import engine
+from settings import engine
 metadata = MetaData()
 users_table = Table('archive_orders', metadata,
     Column('id', Integer, primary_key=True),

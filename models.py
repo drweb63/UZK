@@ -1,5 +1,5 @@
-from database import Base
-from database import engine
+from settings import Base
+from settings import engine
 from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Column,

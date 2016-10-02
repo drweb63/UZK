@@ -1,12 +1,7 @@
 from flask import Flask
 from flask import render_template, url_for, redirect, request, flash
 from models import Users
-from database import session
-from sqlalchemy import text, insert, select
-from settings import path_barcode
-import random, datetime
-from pprint import pprint
-import os
+from settings import session
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
 class RegistrationForm(Form):

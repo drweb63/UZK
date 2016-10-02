@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import request, Response
 from models import Users
-from database import session
+from settings import session
 
 
 def check_auth(username, password):

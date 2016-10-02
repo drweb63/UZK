@@ -1,6 +1,5 @@
-from database import session
+from settings import session
 import re
-from sqlalchemy import text, insert, select, desc, update
 from models import Barcode
 from bar_gen import Code128
 from settings import path_barcode

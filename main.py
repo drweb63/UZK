@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template, url_for, redirect, request, flash
-from auth import requires_auth, requires_manager, requires_boss, requires_admin
+from auth import requires_auth, requires_manager, requires_boss, requires_admin, authenticate
 from settings import session, path_barcode
 from sqlalchemy import desc, update, func
 import random, datetime

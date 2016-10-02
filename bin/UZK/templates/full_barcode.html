@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Добавление заказа {% endblock %}
+
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('orders')}}" method=post>
+    <input type=hidden name="action" value='Adds'>
+    <select name="cartridge" data-placeholder="Выберите картридж" class="chosen-select" style="width:300px;" tabindex="2">
+    {% for cartridge in cartridges %}
+     <option value={{ cartridge.id }}>{{ cartridge.name }}</option>
+     {% endfor %}
+    </select>
+    <select name="customer" data-placeholder="Выберите клиента" class="chosen-select" style="width:300px;" tabindex="2">
+     {% for customer in customers %}
+     <option value={{ customer.id }}>{{ customer.name }}</option>
+     {% endfor %}
+    </select>
+    <select name="tow">
+     {% for tow in tows %}
+     <option value={{ tow.id }}>{{ tow.fullname }}</option>
+     {% endfor %}
+    </select>
+    <select name="mark">
+     <option value="Обычн">Обычный</option>
+     <option value="Наш">Наш</option>
+     <option value="Рекл">Рекламация</option>
+     <option value="Фикт">Фиктивный</option>
+    </select>
+    <input type=text name="barcode" value=''>
+    <input type=text name="date" value={{ date }}>
+    <input type=submit value="Add">
+    <form action="{{ url_for('orders')}}" method=post>
+    <input type=hidden name="action" value='Cancel'>
+    <input type=submit value="Cancel">
+</form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+  <script src="/static/js/chosen.jquery.js" type="text/javascript"></script>
+  <script src="/static/js/prism.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+  </script>
+</form>
+{% endblock %}

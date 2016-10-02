@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %}Типы работ{% endblock %}
+
+{% block collapse %}<ul id="demo">{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block active12 %}class="active"{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Краткое наименование</th><th>Полное наименование</th>
+        </tr>
+        </thead>
+        <tbody>
+{% for row in rows %}
+
+    <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.fullname }}</td>
+    </tr>
+
+{% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

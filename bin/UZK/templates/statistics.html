@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Статистика </br>
+<h4>Параметры сортировки</h4>
+<form class="form-inline" action="{{ url_for('statistics')}}" method=post>
+    <select name="customer" data-placeholder="Выберите клиента" class="chosen-select" style="width:200px;" tabindex="2">
+     <option value="*"></option>
+     {% for item in customers %}
+     <option value='{{item.id}}'>{{item.name}}</option>
+     {% endfor %}
+    </select>
+    <input type=date name="date1" value='*' class="form-control">
+    <input type=date name="date2" value='*' class="form-control">
+    <input type=hidden name="action" value='Sort'>
+    <input class="btn btn-success" type=submit value="Сортировать">
+</form>
+{% endblock %}
+
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block active2 %}class="active"{% endblock %}
+{% block content %}
+    <!--
+<div class="table-responsive">
+<table class="table table-hover">
+<thead>
+<tr>
+    <th>Клиент</th><th>Всего картриджей</th><th>Выполнено работ</th>
+</tr>
+</thead>
+    </table>
+</div> -->
+{% for customer , items in full1.items() %}
+<input type="checkbox" id="hd-{{customer}}" class="hide" />
+<label for="hd-{{customer}}" class="table table-hover">{{customer}}
+</label>
+             <div class="table-responsive">
+            <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Картридж</th><th>Количество</th><th><abbr title="Заправка">З</abbr></th>
+            <th><abbr title="Фотобарабан">Б</abbr></th><th><abbr title="Вал заряда">П</abbr></th><th><abbr title="Лезвие очистки">О</abbr></th>
+            <th><abbr title="Уплотнительное лезвие">У</abbr></th><th><abbr title="Магнитный вал">М</abbr></th>
+            <th><abbr title="Дозирующее лезвие">Д</abbr>
+        </tr>
+        </thead>
+        <tbody>
+{% for number in items %}
+    {% for count, cartridge, toner, opc, pcr, wiper_blade, recovery_blade, develop_blade, doctor_blade in number %}
+<tr>
+        <td>{{ cartridge }}</td>
+        <td>{{ count }}</td>
+        <td>{{ toner }}</td>
+        <td>{{ opc }}</td>
+        <td>{{ pcr }}</td>
+        <td>{{ wiper_blade }}</td>
+        <td>{{ recovery_blade }}</td>
+        <td>{{ develop_blade }}</td>
+        <td>{{ doctor_blade }}</td>
+        </tr>
+        {% endfor %}
+
+{% endfor %}
+</tbody>
+    </table>
+</div>
+        {% endfor %}
+{% endblock %}

@@ -1,0 +1,109 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Все работы с данным картриджем
+{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+{% block active0 %}class="active"{% endblock %}
+{% block content %}
+             <div class="table-responsive">
+            <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Картридж</th><th>Клиент</th><th><abbr title="Заправка">З</abbr></th>
+            <th><abbr title="Фотобарабан">Б</abbr></th><th><abbr title="Вал заряда">П</abbr></th><th><abbr title="Лезвие очистки">О</abbr></th>
+            <th><abbr title="Уплотнительное лезвие">У</abbr></th><th><abbr title="Магнитный вал">М</abbr></th>
+            <th><abbr title="Дозирующее лезвие">Д</abbr></th><th>Штрих-код</th><th>Метка</th><th>Выполнил</th><th>Дата</th><th>Завершено</th>
+
+        </tr>
+        </thead>
+        <tbody>
+{% for close_orders, cartridges, customers in full %}
+
+    <tr class="{{close_orders.status}}">
+        <td>{{ close_orders.id }}</td>
+        <td>{{ cartridges.name }}</td>
+        <td>{{ customers.name }}</td>
+        <td>{{ close_orders.toner }}</td>
+        <td>{{ close_orders.opc }}</td>
+        <td>{{ close_orders.pcr }}</td>
+        <td>{{ close_orders.wiper_blade }}</td>
+        <td>{{ close_orders.recovery_blade }}</td>
+        <td>{{ close_orders.develop_blade }}</td>
+        <td>{{ close_orders.doctor_blade }}</td>
+        <td>{{ close_orders.barcode }}</td>
+        <td>{{ close_orders.mark }}</td>
+        <td>{{ close_orders.user_close }}</td>
+        <td>{{ close_orders.date }}</td>
+        <td>{{ close_orders.date_close }}</td>
+        <td><abbr title="{{ close_orders.comment }}"><p class="glyphicon glyphicon-comment"> </p></abbr></td>
+        <td><a class="btn btn-xs btn-warning" href="javascript:void(0)" onclick = "document.getElementById('{{close_orders.id}}').style.display='block';document.getElementById('{{close_orders.id}}').style.display='block'"><span class="glyphicon glyphicon-pencil"></span></a></td>
+    </tr>
+<tr><td colspan="17">
+            <div id="{{close_orders.id}}" class="envelope">
+
+		    <h2>Изменить завершенный заказ</h2>
+		    <form class="form-inline" action="{{ url_for('full_close_order')}}" method=post>
+                <input type=hidden name="action" value='Edit'><br>
+                <input type=hidden name="id" value='{{close_orders.id}}'>
+                <input class="form-control" type="checkbox" name="toner" value="1" > Заправка
+                <input class="form-control" type="checkbox" name="opc" value="1" > Фотобарабан
+                <input class="form-control" type="checkbox" name="pcr" value="1" > Вал заряда
+                <input class="form-control" type="checkbox" name="wiper_blade" value="1" > Лезвие очистки
+                <input class="form-control" type="checkbox" name="recovery_blade" value="1" > Уплотнительное лезвие<br>
+                <input class="form-control" type="checkbox" name="develop_blade" value="1" > Магнитный вал
+                <input class="form-control" type="checkbox" name="doctor_blade" value="1" > Дозирующее лезвие
+                <select class="form-control" name="mark">
+                <option value="Обычн">Обычный</option>
+                <option value="Наш">Наш</option>
+                <option value="Рекл">Рекламация</option>
+                <option value="Фикт">Фиктивный</option>
+                </select>
+                <input class="form-control" type=text name="comment" value=''><br>
+                Завершил<br>
+                <select class="form-control" name="user_close">
+                {% for name in user %}
+                <option value='{{ name.fullname }}'>{{ name.fullname }}</option>
+                {% endfor %}
+                </select>
+		        <input type="submit" value="Закрыть" class="btn btn-danger">
+                <a class="btn btn-warning" href="javascript:void(0)" onclick = "document.getElementById('{{id}}').style.display='none';document.getElementById('fade').style.display='none'">Отмена</a>
+
+		    </form>
+	         </div></td></tr>
+
+{% endfor %}
+{% for close_orders, cartridges, customers in full1 %}
+
+    <tr class="{{close_orders.status}}">
+        <td>{{ close_orders.id }}</td>
+        <td>{{ cartridges.name }}</td>
+        <td>{{ customers.name }}</td>
+        <td>{{ close_orders.toner }}</td>
+        <td>{{ close_orders.opc }}</td>
+        <td>{{ close_orders.pcr }}</td>
+        <td>{{ close_orders.wiper_blade }}</td>
+        <td>{{ close_orders.recovery_blade }}</td>
+        <td>{{ close_orders.develop_blade }}</td>
+        <td>{{ close_orders.doctor_blade }}</td>
+        <td>{{ close_orders.barcode }}</td>
+        <td>{{ close_orders.mark }}</td>
+        <td>{{ close_orders.user_close }}</td>
+        <td>{{ close_orders.date }}</td>
+        <td>{{ close_orders.date_close }}</td>
+        <td><abbr title="{{ close_orders.comment }}"><p class="glyphicon glyphicon-comment"> </p></abbr></td>
+    </tr>
+
+{% endfor %}
+
+
+
+        </tbody>
+    </table>
+</div>
+</br>
+
+{% endblock %}

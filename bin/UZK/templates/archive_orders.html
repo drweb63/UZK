@@ -1,0 +1,103 @@
+
+{% extends "base.html" %}
+{% block userprofile %}
+{{fullnames}}
+{% endblock %}
+{% block page_title %} Архив заказов <button type="button" class="btn btn-sm btn-primary" disabled="disabled">{{count}}</button><br>
+<h4>Параметры сортировки</h4>
+<form class="form-inline" action="{{ url_for('archive_orders')}}" method=post>
+    <select name="cartridge" data-placeholder="Выберите картридж" class="chosen-select" style="width:200px;" tabindex="2">
+     <option value="*"></option>
+     {% for item in cartridges %}
+     <option value='{{item.id}}'>{{item.name}}</option>
+     {% endfor %}
+    </select>
+    <select name="customer" data-placeholder="Выберите клиента" class="chosen-select" style="width:200px;" tabindex="2">
+     <option value="*"></option>
+     {% for item in customers %}
+     <option value='{{item.id}}'>{{item.name}}</option>
+     {% endfor %}
+    </select>
+    <select name="mark" class="form-control">
+     <option value="*"></option>
+     <option value="Обычн">Обычный</option>
+     <option value="Наш">Наш</option>
+     <option value="Рекл">Рекламация</option>
+     <option value="Фикт">Фиктивный</option>
+    </select>
+    <select name="user" class="form-control">
+     <option value="*"></option>
+     {% for item in users %}
+     <option value='{{item.fullname}}'>{{item.fullname}}</option>
+     {% endfor %}
+    </select>
+    <input type=date name="date1" value='*' class="form-control">
+    <input type=date name="date2" value='*' class="form-control"><br>
+    <input class="form-control" type="checkbox" name="toner" value="1"><abbr title="Заправка">З</abbr>
+    <input class="form-control" type="checkbox" name="opc" value="1"><abbr title="Фотобарабан">Б</abbr>
+    <input class="form-control" type="checkbox" name="pcr" value="1"><abbr title="Вал заряда">П</abbr>
+    <input class="form-control" type="checkbox" name="wiper_blade" value="1"><abbr title="Лезвие очистки">О</abbr>
+    <input class="form-control" type="checkbox" name="recovery_blade" value="1"><abbr title="Уплотнительное лезвие">У</abbr>
+    <input class="form-control" type="checkbox" name="develop_blade" value="1"><abbr title="Магнитный вал">М</abbr>
+    <input class="form-control" type="checkbox" name="doctor_blade" value="1"><abbr title="Дозирующее лезвие">Д</abbr>
+    <input type=hidden name="action" value='Sort'>
+    <input class="btn btn-success" type=submit value="Сортировать">
+</form>
+
+
+{% endblock %}
+{% block collapse1 %}<ul id="demoo" class="collapse">{% endblock %}
+{% block collapse %}<ul id="demo" class="collapse">{% endblock %}
+{% block active13 %}class="active"{% endblock %}
+{% block content %}
+         <div class="table-responsive">
+{% for customer, items in full.items() %}
+<input type="checkbox" id="hd-{{customer}}" class="hide" />
+<label for="hd-{{customer}}" class="table table-hover">{{customer}}</label>
+             <div class="table-responsive">
+            <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th><th>Картридж</th><th>Клиент</th><th><abbr title="Заправка">З</abbr></th>
+            <th><abbr title="Фотобарабан">Б</abbr></th><th><abbr title="Вал заряда">П</abbr></th><th><abbr title="Лезвие очистки">О</abbr></th>
+            <th><abbr title="Уплотнительное лезвие">У</abbr></th><th><abbr title="Магнитный вал">М</abbr></th>
+            <th><abbr title="Дозирующее лезвие">Д</abbr></th><th>Штрих-код</th><th>Метка</th><th>Выполнил</th><th>Дата</th><th>Дата закрытия</th>
+
+        </tr>
+        </thead>
+        <tbody>
+{% for id, cartridge, customer, toner, opc, pcr, wiper_blade, recovery_blade, develop_blade, doctor_blade, barcode, mark, user_close, date, date_close, status in items %}
+
+    <tr class="{{status}}">
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ id }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ cartridge }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ customer }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ toner }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ opc }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ pcr }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ wiper_blade }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ recovery_blade }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ develop_blade }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ doctor_blade }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ barcode }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ mark }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ user_close }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ date }}</td>
+        <td onclick='window.location.href="/full_close_order/?barcode={{ barcode }}"; return false'>{{ date_close }}</td>
+         <td nowrap>
+             <button class="btn btn-xs btn-link" id="printBut" onclick="print('{{barcode}}.gif')"><span class="glyphicon glyphicon-print"></span></button>
+        </td>
+    </tr>
+
+{% endfor %}
+
+
+
+        </tbody>
+    </table>
+</div>
+</br>
+        {% endfor %}
+            </div>
+
+{% endblock %}

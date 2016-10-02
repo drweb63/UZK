@@ -1,9 +1,8 @@
 from flask import Flask
 from flask import render_template, url_for, redirect, request, flash
 from auth import requires_auth, requires_manager, requires_boss, requires_admin
-from database import session
+from settings import session, path_barcode
 from sqlalchemy import desc, update, func
-from settings import path_barcode
 import random, datetime
 from models import (
     Orders,

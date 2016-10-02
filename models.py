@@ -154,8 +154,8 @@ class Logs(Base):
 
     id = Column(Integer, primary_key=True)
     user = Column(String(250), nullable=True, default='')
-    time = Column(String(250), nullable=True, default='')
-    message = Column(Date, nullable=True, default='')
+    time = Column(Date, nullable=True, default='')
+    message = Column(String(250), nullable=True, default='')
 
     def __str__(self):
         return self.user

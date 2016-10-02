@@ -1,0 +1,6 @@
+pip>=8.1.2
+flask
+psycopg2
+sqlalchemy
+reportlab
+openpyxl

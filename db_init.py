@@ -5,8 +5,8 @@ import models
 metadata = MetaData()
 Customers = Table('customers', metadata,
     Column('id', Integer, primary_key=True),
-    Column('name', Integer, nullable=False, default=''),
-    Column('inn', Integer, nullable=True, default='')
+    Column('name', String(250), nullable=False, default=''),
+    Column('inn', String(250), nullable=True, default='')
 )
 Cartridges = Table('cartridges', metadata,
     Column('id', Integer, primary_key=True),
@@ -93,8 +93,8 @@ Users = Table('users', metadata,
 Logs = Table('logs', metadata,
     Column('id', Integer, primary_key=True),
     Column('user', String(250), nullable=True, default=''),
-    Column('time', String(250), nullable=True, default=''),
-    Column('message', Date, nullable=True, default='')
+    Column('time', Date, nullable=True, default=''),
+    Column('message', String(250), nullable=True, default='')
 )
 
 metadata.bind = engine

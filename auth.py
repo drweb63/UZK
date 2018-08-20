@@ -22,6 +22,7 @@ def authenticate():
     {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 def requires_auth(f):
+    """Check autentification"""
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
